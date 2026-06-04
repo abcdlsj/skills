@@ -12,10 +12,10 @@ Use `emby_client.py` to query and manage an Emby server from Sumi.
 Either configure scoped env in Sumi:
 
 ```toml
-[skills.env]
-EMBY_SERVER = "http://your-emby-server:8096"
-EMBY_USERNAME = "your-username"
-EMBY_PASSWORD = "your-password"
+[emby]
+server = "http://your-emby-server:8096"
+username = "your-username"
+password = "your-password"
 ```
 
 Or create `~/.sumi/cookie/emby_config.json`:

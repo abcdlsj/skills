@@ -10,15 +10,16 @@ Use this skill when a run needs to send a user-visible Bark notification.
 This skill is intentionally narrow:
 
 - The caller provides only `title`, `body`, optional `level`, and optional `source`.
-- The Bark endpoint is read from local configuration or `SUMI_BARK_URL`.
+- The Bark endpoint is read from local configuration or `SUMI_NOTIFY_BARK_URL`.
 - Do not accept arbitrary webhook URLs from prompts or task text.
 
 ## Setup
 
-Set either an environment variable:
+Set either Sumi capability config:
 
-```bash
-export SUMI_BARK_URL="https://api.day.app/<device-key>"
+```toml
+[notify]
+bark_url = "https://api.day.app/<device-key>"
 ```
 
 Or create `~/.sumi/cookie/bark_config.json`:

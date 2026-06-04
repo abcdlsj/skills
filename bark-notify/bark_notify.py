@@ -28,7 +28,7 @@ def main() -> int:
 
     endpoint = load_endpoint()
     if not endpoint and not args.dry_run:
-        return fail("missing Bark endpoint: set SUMI_BARK_URL or ~/.sumi/cookie/bark_config.json")
+        return fail("missing Bark endpoint: set SUMI_NOTIFY_BARK_URL or ~/.sumi/cookie/bark_config.json")
 
     title = clean_text(args.title, "title")
     body = clean_text(args.body, "body")
@@ -62,6 +62,9 @@ def main() -> int:
 
 
 def load_endpoint() -> str:
+    env = os.environ.get("SUMI_NOTIFY_BARK_URL", "").strip()
+    if env:
+        return env
     env = os.environ.get("SUMI_BARK_URL", "").strip()
     if env:
         return env
