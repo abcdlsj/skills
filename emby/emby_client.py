@@ -3,6 +3,7 @@
 
 import argparse
 import json
+import os
 import sys
 from pathlib import Path
 from urllib.parse import urlencode
@@ -304,13 +305,10 @@ def simplify(client, item):
 
 
 def client_from_config():
-    if not CONFIG_PATH.exists():
-        fail(f"Config file not found: {CONFIG_PATH}")
-
-    config = read_json(CONFIG_PATH)
+    config = load_config()
     server = config.get("server")
     if not server:
-        fail("Missing 'server' in config file")
+        fail("Missing Emby server. Set EMBY_SERVER or add 'server' to the config file")
 
     client = EmbyClient(server)
     if client.load_token() and client.verify_token():
@@ -319,7 +317,7 @@ def client_from_config():
     username = config.get("username")
     password = config.get("password")
     if not username or not password:
-        fail("Login required. Add 'username' and 'password' to the config file")
+        fail("Login required. Set EMBY_USERNAME/EMBY_PASSWORD or add them to the config file")
 
     try:
         client.login(username, password)
@@ -327,6 +325,19 @@ def client_from_config():
         fail(f"Login failed: {e}")
 
     return client
+
+
+def load_config():
+    config = read_json(CONFIG_PATH) if CONFIG_PATH.exists() else {}
+    env = {
+        "server": os.environ.get("EMBY_SERVER", ""),
+        "username": os.environ.get("EMBY_USERNAME", ""),
+        "password": os.environ.get("EMBY_PASSWORD", ""),
+    }
+    for key, value in env.items():
+        if value:
+            config[key] = value
+    return config
 
 
 def cmd_status(client, args):
